@@ -6,5 +6,6 @@ public class GMain {
 		GMainFrame mainFrame = new GMainFrame();
 		mainFrame.initialize();
 		mainFrame.setVisible(true);
+		System.out.print("git brunch test");
 	}
 }
