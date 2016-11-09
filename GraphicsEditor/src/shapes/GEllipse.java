@@ -1,20 +1,15 @@
 package shapes;
-
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
-
 import contant.GConstants.EDrawingType;
-
 public class GEllipse extends GShape {
-	private Rectangle rectangle;
+	
 	private Ellipse2D.Double ellipse;
-	double w,h=0;
+	private int check=0;
 	public GEllipse() {
 		super(EDrawingType.TP);
 		this.ellipse=new Ellipse2D.Double(0,0,0,0);
-		
 		this.shape = this.ellipse;
 	}
 	@Override
@@ -37,11 +32,21 @@ public class GEllipse extends GShape {
 	@Override
 	public void draw(Graphics2D g2D) {
 		// TODO Auto-generated method stub
-		g2D.draw(this.ellipse);
-		
+//		g2D.draw(this.ellipse);
+//		this.getAnchors().draw(g2D, this.ellipse.getBounds());
+		if(check==1){
+			g2D.draw(this.ellipse);
+			this.getAnchors().draw(g2D, this.ellipse.getBounds());
+			
+		}else{
+			g2D.draw(this.ellipse);
+		}
 	}
 	public void drawAnchors(Graphics2D g2D){
+		check=1;
+		g2D.draw(this.ellipse);
 		this.getAnchors().draw(g2D, this.ellipse.getBounds());
+		
 	}
 
 }

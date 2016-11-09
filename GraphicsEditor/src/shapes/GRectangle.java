@@ -1,7 +1,5 @@
 package shapes;
 
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -9,8 +7,7 @@ import contant.GConstants.EDrawingType;
 
 public class GRectangle extends GShape {
 	private Rectangle rectangle;
-	
-	
+	private int check=0;
 	public GRectangle() {
 		super(EDrawingType.TP);
 		this.rectangle=new Rectangle(0,0,0,0);
@@ -31,18 +28,22 @@ public class GRectangle extends GShape {
 	public void finishDrawing(int x, int y, Graphics2D g2D) {
 	}
 	public void continueDrawing(int x, int y, Graphics2D g2D){
-		
-		if(rectangle.contains(x,y)){
-			
-		}
 	}
 	@Override
 	public void draw(Graphics2D g2D) {
-		g2D.draw(this.rectangle);
-	
+		if(check==1){
+			g2D.draw(this.rectangle);
+			this.getAnchors().draw(g2D, this.rectangle.getBounds());
+		
+		}else{
+			g2D.draw(this.rectangle);
+		}
 		
 	}
 	public void drawAnchors(Graphics2D g2D){
+		check=1;
+		g2D.draw(this.rectangle);
 		this.getAnchors().draw(g2D, this.rectangle.getBounds());
+		
 	}
 }

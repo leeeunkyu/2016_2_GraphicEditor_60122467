@@ -9,8 +9,7 @@ import contant.GConstants.EDrawingType;
 public class GPolygon extends GShape {
    private Polygon polygon;
    private Polygon polyline;
-   int xp[]=new int [1];
-   int yp[]=new int [1];
+   int check=0;
    public GPolygon() {
       super(EDrawingType.NP);
       this.polygon = new Polygon();
@@ -50,6 +49,10 @@ public class GPolygon extends GShape {
 	   g2D.drawPolyline(polygon.xpoints,polygon.ypoints,polygon.npoints);
 	   g2D.draw(this.polygon);
 	   g2D.draw(this.polygon);
+	  if(check==1){
+		  
+		  this.getAnchors().draw(g2D, this.polygon.getBounds());
+	  }
 	   //this.getAnchors().draw(g2D, this.polygon.getBounds());
    }
    public void drawAnchors(Graphics2D g2D){

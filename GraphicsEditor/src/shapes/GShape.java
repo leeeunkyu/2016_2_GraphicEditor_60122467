@@ -36,7 +36,10 @@ abstract public class GShape {
 		}
 		return null;
 	}
-	public boolean contanins(int x, int y) {		
+	public boolean contanins(int x, int y) {
+//		System.out.println(x+"  "+y);
+//		System.out.println(shape.getClass().getName());
+//		System.out.println(shape.contains(x, y));
 		return shape.contains(x, y);
 		
 		// 지정된 좌표가 Shape 의 경계내에 있을지 어떨지를 판정 합니다.
