@@ -7,6 +7,7 @@ import shapes.GShape;
 import shapes.GLine;
 import shapes.GPolygon;
 import shapes.GRectangle;
+import shapes.Anchors;
 
 public class GConstants {
 	public final static int MAINFRAME_X = 100;
@@ -64,6 +65,8 @@ public class GConstants {
 		ellipse("rsc/ellipse.gif","rsc/ellipseSLT.gif",new GEllipse()),
 		line("rsc/line.gif","rsc/lineSLT.gif",new GLine()),
 		polygon("rsc/polygon.gif","rsc/polygonSLT.gif", new GPolygon());
+		
+		
 		private String iconName;
 		private String selectedIconName;
 		private GShape shape;
@@ -77,6 +80,7 @@ public class GConstants {
 		public String getSelectedIconName(){ return this.selectedIconName;}
 		public GShape getShape(){return this.shape;}
 	}
-	
+	public final static int ANCHORWIDTH=4;
+	public final static int ANCHORHIGTH=4;
 	
 }

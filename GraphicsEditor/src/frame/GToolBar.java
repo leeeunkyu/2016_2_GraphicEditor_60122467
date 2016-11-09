@@ -7,6 +7,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
 
 import contant.GConstants.EToolBarButton;
+import shapes.Anchors;
 
 public class GToolBar extends JToolBar {
 	private static final long serialVersionUID = 1L;
@@ -29,8 +30,18 @@ public class GToolBar extends JToolBar {
 			this.add(button);
 			buttonGroup.add(button);
 			button.addActionListener(actionHandler);
-			button.setActionCommand(eToolBarButton.toString());				
+			button.setActionCommand(eToolBarButton.toString());
+			System.out.println(eToolBarButton.toString());
 		}
+		
+		JRadioButton button = new JRadioButton();
+		button.setIcon(new ImageIcon("rsc/anchor.gif"));
+		button.setSelectedIcon(new ImageIcon("rsc/anchorSLT.gif"));
+		this.add(button);
+		buttonGroup.add(button);
+		button.addActionListener(actionHandler);
+		button.setActionCommand("anchor");
+		
 	}
 	public void initialize() {
 		JRadioButton button = (JRadioButton) this.getComponentAtIndex(EToolBarButton.rectangle.ordinal());
@@ -39,8 +50,15 @@ public class GToolBar extends JToolBar {
 	public class ActionHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			drawingPanel.setSelectedShape(
-					EToolBarButton.valueOf(e.getActionCommand()).getShape());
+			if(e.getActionCommand().equals("anchor")){
+				
+				drawingPanel.setSelectedSkill();
+					
+			}else{
+				drawingPanel.setSelectedShape(
+						EToolBarButton.valueOf(e.getActionCommand()).getShape());
+				
+			}
 		}
 	}
 	
