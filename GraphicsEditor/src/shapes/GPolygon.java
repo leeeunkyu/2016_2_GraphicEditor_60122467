@@ -46,16 +46,20 @@ public class GPolygon extends GShape {
    @Override
    public void draw(Graphics2D g2D) {
       // TODO Auto-generated method stub
-	   g2D.drawPolyline(polygon.xpoints,polygon.ypoints,polygon.npoints);
-	   g2D.draw(this.polygon);
-	   g2D.draw(this.polygon);
+	
 	  if(check==1){
-		  
+		  g2D.draw(this.polygon);
 		  this.getAnchors().draw(g2D, this.polygon.getBounds());
+	  }else{
+		  g2D.drawPolyline(polygon.xpoints,polygon.ypoints,polygon.npoints);
+		   g2D.draw(this.polygon);
+		   g2D.draw(this.polygon);
 	  }
 	   //this.getAnchors().draw(g2D, this.polygon.getBounds());
    }
    public void drawAnchors(Graphics2D g2D){
+	   check=1;
+	   g2D.draw(this.polygon);
 	   this.getAnchors().draw(g2D, this.polygon.getBounds());
 	}
 }
