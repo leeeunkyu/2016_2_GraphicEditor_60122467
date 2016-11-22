@@ -10,7 +10,7 @@ public class GLine extends GShape {
 	public GLine() {
 		super(EDrawingType.TP);
 		this.line = new Line2D.Double(0, 0, 0, 0);
-		this.shape = this.line;
+		this.setShape(this.line);
 	}
 	@Override
 	public void initDrawing(int x, int y, Graphics2D g2D) {
@@ -30,11 +30,11 @@ public class GLine extends GShape {
 	@Override
 	public void draw(Graphics2D g2D) {
 		g2D.draw(line);
-		
 	}
 	@Override
 	public void drawAnchors(Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

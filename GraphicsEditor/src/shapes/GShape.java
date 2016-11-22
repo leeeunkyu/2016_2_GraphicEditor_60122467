@@ -2,22 +2,24 @@ package shapes;
 
 import java.awt.Cursor;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
 
 import contant.GConstants.EDrawingType;
 
 abstract public class GShape {
-	Cursor cursor;
 	protected Shape shape;
 	private EDrawingType eDrawingType;
-	public EDrawingType geteDrawingType(){return eDrawingType;}
 	private Anchors anchors;
+	
+	public Shape getShape() {return shape;}
+	public void setShape(Shape shape) {this.shape = shape;}
+	public EDrawingType geteDrawingType(){return eDrawingType;}
+	public void seteDrawingType(EDrawingType eDrawingType) { this.eDrawingType = eDrawingType;	}
 	public Anchors getAnchors() {return anchors;}
 	public void setAnchors(Anchors anchors) {this.anchors = anchors;}
 	
-	public void seteDrawingType(EDrawingType eDrawingType) {
-		this.eDrawingType = eDrawingType;
-	}
+	
 	public GShape(EDrawingType eDrawingType){
 		this.eDrawingType = eDrawingType;
 		this.anchors=new Anchors();

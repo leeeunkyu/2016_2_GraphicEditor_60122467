@@ -7,10 +7,11 @@ public class GEllipse extends GShape {
 	
 	private Ellipse2D.Double ellipse;
 	private int check=0;
+
 	public GEllipse() {
 		super(EDrawingType.TP);
 		this.ellipse=new Ellipse2D.Double(0,0,0,0);
-		this.shape = this.ellipse;
+		this.setShape(this.ellipse);;
 	}
 	@Override
 	public void initDrawing(int x, int y, Graphics2D g2D) {

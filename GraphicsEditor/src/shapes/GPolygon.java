@@ -13,7 +13,7 @@ public class GPolygon extends GShape {
    public GPolygon() {
       super(EDrawingType.NP);
       this.polygon = new Polygon();
-      this.shape = this.polygon;
+      this.setShape(this.polygon);
       this.polyline = new Polygon();
    }
    @Override
@@ -46,7 +46,6 @@ public class GPolygon extends GShape {
    @Override
    public void draw(Graphics2D g2D) {
       // TODO Auto-generated method stub
-	
 	  if(check==1){
 		  g2D.draw(this.polygon);
 		  this.getAnchors().draw(g2D, this.polygon.getBounds());

@@ -117,12 +117,11 @@ public class GDrawingPanel extends JPanel {
 //				System.out.println("linetest");
 				hourglassCursor =new Cursor(Cursor.WAIT_CURSOR);
 				setCursor(hourglassCursor);
-				break;
-			} else {
-				hourglassCursor=new Cursor(Cursor.DEFAULT_CURSOR);
-				setCursor(hourglassCursor);
+				return;
 			}
 		}
+		hourglassCursor=new Cursor(Cursor.DEFAULT_CURSOR);
+		setCursor(hourglassCursor);
 	}
    class MouseEventHandler 
       implements MouseInputListener, MouseMotionListener {

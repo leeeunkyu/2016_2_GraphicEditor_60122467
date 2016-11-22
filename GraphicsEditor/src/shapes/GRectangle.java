@@ -1,5 +1,6 @@
 package shapes;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -11,7 +12,7 @@ public class GRectangle extends GShape {
 	public GRectangle() {
 		super(EDrawingType.TP);
 		this.rectangle=new Rectangle(0,0,0,0);
-		this.shape = this.rectangle;
+		this.setShape(this.rectangle);
 	}
 	@Override
 	public void initDrawing(int x, int y, Graphics2D g2D) {
@@ -20,8 +21,9 @@ public class GRectangle extends GShape {
 	@Override
 	public void keepDrawing(int x, int y, Graphics2D g2D) {
 		this.draw(g2D);
-		this.rectangle.width= x - this.rectangle.x;
-		this.rectangle.height=y - this.rectangle.y;
+		this.rectangle.setSize(new Dimension ((x - this.rectangle.x),(y-this.rectangle.y)));
+//		this.rectangle.width= x - this.rectangle.x;
+//		this.rectangle.height=y - this.rectangle.y;
 		this.draw(g2D);		
 	}
 	@Override
