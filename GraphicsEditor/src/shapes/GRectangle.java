@@ -8,7 +8,6 @@ import contant.GConstants.EDrawingType;
 
 public class GRectangle extends GShape {
 	private Rectangle rectangle;
-	private int check=0;
 	public GRectangle() {
 		super(EDrawingType.TP);
 		this.rectangle=new Rectangle(0,0,0,0);
@@ -17,13 +16,12 @@ public class GRectangle extends GShape {
 	@Override
 	public void initDrawing(int x, int y, Graphics2D g2D) {
 		this.rectangle.setLocation(x,y);
+		this.draw(g2D);
 	}
 	@Override
 	public void keepDrawing(int x, int y, Graphics2D g2D) {
 		this.draw(g2D);
 		this.rectangle.setSize(new Dimension ((x - this.rectangle.x),(y-this.rectangle.y)));
-//		this.rectangle.width= x - this.rectangle.x;
-//		this.rectangle.height=y - this.rectangle.y;
 		this.draw(g2D);		
 	}
 	@Override
@@ -31,21 +29,5 @@ public class GRectangle extends GShape {
 	}
 	public void continueDrawing(int x, int y, Graphics2D g2D){
 	}
-	@Override
-	public void draw(Graphics2D g2D) {
-		if(check==1){
-			g2D.draw(this.rectangle);
-			this.getAnchors().draw(g2D, this.rectangle.getBounds());
-		
-		}else{
-			g2D.draw(this.rectangle);
-		}
-		
-	}
-	public void drawAnchors(Graphics2D g2D){
-		check=1;
-		g2D.draw(this.rectangle);
-		this.getAnchors().draw(g2D, this.rectangle.getBounds());
-		
-	}
+	
 }

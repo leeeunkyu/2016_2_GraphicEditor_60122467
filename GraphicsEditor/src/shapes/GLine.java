@@ -27,14 +27,5 @@ public class GLine extends GShape {
 	@Override
 	public void finishDrawing(int x, int y, Graphics2D g2D) {
 	}
-	@Override
-	public void draw(Graphics2D g2D) {
-		g2D.draw(line);
-	}
-	@Override
-	public void drawAnchors(Graphics2D g2d) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

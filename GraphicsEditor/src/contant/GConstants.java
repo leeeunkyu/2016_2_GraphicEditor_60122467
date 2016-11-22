@@ -14,7 +14,7 @@ public class GConstants {
 	public final static int MAINFRAME_Y = 100;
 	public final static int MAINFRAME_W = 400;
 	public final static int MAINFRAME_H = 600;
-	
+	public enum EAnchors {NN, NE, NW, SS, SE, SW, EE, WW, RR, MM};
 	public final static String MAINFRAME_TITLE = "GraphicsEditor";
 	public final static String FILEMENU_TITLE = "File";
 	public final static String EDITMENU_TITLE = "Edit";

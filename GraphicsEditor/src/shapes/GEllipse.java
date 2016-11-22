@@ -30,24 +30,4 @@ public class GEllipse extends GShape {
 	public void continueDrawing(int x, int y, Graphics2D g2D){
 		
 	}
-	@Override
-	public void draw(Graphics2D g2D) {
-		// TODO Auto-generated method stub
-//		g2D.draw(this.ellipse);
-//		this.getAnchors().draw(g2D, this.ellipse.getBounds());
-		if(check==1){
-			g2D.draw(this.ellipse);
-			this.getAnchors().draw(g2D, this.ellipse.getBounds());
-			
-		}else{
-			g2D.draw(this.ellipse);
-		}
-	}
-	public void drawAnchors(Graphics2D g2D){
-		check=1;
-		g2D.draw(this.ellipse);
-		this.getAnchors().draw(g2D, this.ellipse.getBounds());
-		
-	}
-
 }

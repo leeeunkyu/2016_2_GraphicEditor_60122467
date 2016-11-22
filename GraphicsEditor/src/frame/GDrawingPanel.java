@@ -8,7 +8,10 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+
+import contant.GConstants.EAnchors;
 import contant.GConstants.EDrawingType;
+import shapes.GCurSor;
 import shapes.Anchors;
 import shapes.GShape;
 
@@ -61,6 +64,7 @@ public class GDrawingPanel extends JPanel {
       
    }
    public void paint(Graphics g) {
+	  super.paint(g);
       for(GShape shape : this.shapeVector){
          shape.draw((Graphics2D)g);
       }
@@ -68,7 +72,14 @@ public class GDrawingPanel extends JPanel {
     	  anc.draw((Graphics2D)g);
       }
    } 
+	private void resetSelected() {
+		for (GShape shape: this.shapeVector) {
+			shape.setSelected(false);
+		}
+		this.repaint();
+	}
    private void initDrawing(int x, int y){
+	  this.resetSelected();
       this.currentShape = this.selectedShape.clone();
       Graphics2D g2D = (Graphics2D) this.getGraphics();
       g2D.setXORMode(this.getBackground());
@@ -93,39 +104,40 @@ public class GDrawingPanel extends JPanel {
    
    private void changeAnchors(int x, int y){
 	   for (int i=0;i<shapeVector.size();i++) {
-		   if(anchor == Anchorstate.anchorpush && shapeVector.get(i).contanins(x, y)){
-			   System.out.println(shapeVector.get(i).hashCode());
-			   System.out.println(shapeVector.size());
+		   if(anchor == Anchorstate.anchorpush && shapeVector.get(i).contains2(x, y)){
 			   Graphics2D g2D = (Graphics2D) this.getGraphics();
 			   shapeVector.get(i).drawAnchors(g2D);
-			   System.out.println("test");
-			   this.currentShape = this.selectedShape.clone();
+			   //this.currentShape = this.selectedShape.clone();
 			   this.shapeVector.add(this.currentShape);
-			   System.out.println(this.currentShape);
 			   break;  
-		}
-		  
+		}  
 	   }
    }
    
-   private void changePointShape(int x, int y) {
-		for (int i=0;i<shapeVector.size();i++) {
-//			System.out.println(shapeVector.get(i).getClass());
-			if (shapeVector.get(i).contanins(x, y)) {
-//				System.out.println(shapeVector.get(i).getClass());
-//				System.out.println(shapeVector.size());			
-//				System.out.println("linetest");
-				hourglassCursor =new Cursor(Cursor.WAIT_CURSOR);
-				setCursor(hourglassCursor);
-				return;
+   private void changeCursor(int x, int y) {
+		for (GShape shape: this.shapeVector) {
+			EAnchors eAnchor = shape.contanins(x, y);
+			if(eAnchor != null){
+				switch(eAnchor){
+					case NN: this.setCursor(GCurSor.N_RESIZE()); return;
+					case NE: this.setCursor(GCurSor.NE_RESIZE()); return;
+					case NW: this.setCursor(GCurSor.NW_RESIZE()); return;
+					case SS: this.setCursor(GCurSor.S_RESIZE()); return;
+					case SW: this.setCursor(GCurSor.SW_RESIZE());return;
+					case SE: this.setCursor(GCurSor.SE_RESIZE()); return;
+					case EE: this.setCursor(GCurSor.E_RESIZE()); return;
+					case WW: this.setCursor(GCurSor.W_RESIZE()); return;
+					case RR: this.setCursor(GCurSor.RR()); return;
+					case MM: this.setCursor(GCurSor.MOVE()); return;
+				}
 			}
+	
 		}
-		hourglassCursor=new Cursor(Cursor.DEFAULT_CURSOR);
-		setCursor(hourglassCursor);
+			this.setCursor(GCurSor.defaultcursor());
 	}
-   class MouseEventHandler 
-      implements MouseInputListener, MouseMotionListener {
-      
+   
+   class MouseEventHandler implements MouseInputListener, MouseMotionListener {
+
       @Override
       public void mouseClicked(MouseEvent e) {
          if(e.getClickCount() == 1){
@@ -171,7 +183,7 @@ public class GDrawingPanel extends JPanel {
          if (eState == EState.NPDrawing) {      
             keepDrawing(e.getX(), e.getY());
          }else if (eState == EState.idleTP || eState == EState.idleNP) {
-				changePointShape(e.getX(), e.getY());
+        	 changeCursor(e.getX(), e.getY());
 			}
       }      
       @Override
