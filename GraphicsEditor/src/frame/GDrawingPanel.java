@@ -267,10 +267,12 @@ public class GDrawingPanel extends JPanel {
          if (eState == EState.idleNP && anchor == Anchorstate.anchorready ) {
                initDrawing(e.getX(), e.getY());
                eState = EState.drawingNP;
+               System.out.println("©╗д©╩Себ 1");
          }else if(eState == EState.drawingNP){
             continueDrawing(e.getX(), e.getY());
-         }else if(eState == EState.idleTP || eState == EState.idleNP && anchor == Anchorstate.anchorpush){
+         }else if((eState == EState.idleTP || eState == EState.idleNP) && anchor == Anchorstate.anchorpush){
         	 //©╗д©
+        	 System.out.println("©╗д©╩Себ 2");
         	 changeAnchors(e.getX(), e.getY());
          }
       }
@@ -285,11 +287,13 @@ public class GDrawingPanel extends JPanel {
     	if (eState == EState.idleTP) {
     		currentShape = onShape(e.getX(), e.getY());
     	  if (currentShape == null && anchor == Anchorstate.anchorready) {
-            initDrawing(e.getX(), e.getY());
-            eState = EState.drawingTP;
+    		  System.out.println("©╗д©╩Себ 3");
+    		  initDrawing(e.getX(), e.getY());
+    		  eState = EState.drawingTP;
            
          }
     	  else {
+    		  System.out.println("©╗д©╩Себ 4");
 				initTransforming(e.getX(), e.getY());
 				eState = EState.transforming;
 			}
@@ -298,9 +302,11 @@ public class GDrawingPanel extends JPanel {
       @Override
       public void mouseReleased(MouseEvent e) {
          if (eState == EState.drawingTP && anchor == Anchorstate.anchorready) {      
-            finishDrawing(e.getX(), e.getY());
+        	 System.out.println("©╗д©╩Себ 5");
+        	 finishDrawing(e.getX(), e.getY());
             eState = EState.idleTP;
          }else if (eState == EState.transforming) {
+        	 System.out.println("©╗д©╩Себ 6");
 				finishTransforming(e.getX(), e.getY());
 				eState = EState.idleTP;
 			} 

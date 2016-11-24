@@ -51,34 +51,39 @@ public class GPolygon extends GShape {
 //	   g2D.draw(this.polygon);
 //	   this.getAnchors().draw(g2D, this.polygon.getBounds());
 //	}
-@Override
-public void initTransforming(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void keepTransforming(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void finishTransforming(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void initResizing(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void keepResizing(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void finishResizing(int x, int y, Graphics2D g2d) {
-	// TODO Auto-generated method stub
-	
-}
-}
+   @Override
+   public void initTransforming(int x, int y, Graphics2D g2d) {
+	   // TODO Auto-generated method stub
+		this.setP1(x, y);
+		this.draw(g2d);
+   }
+   @Override
+	public void keepTransforming(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+	   this.draw(g2d);
+		this.polygon.translate(this.polygon.xpoints[polygon.npoints-1]+x - this.getP1().x,this.polygon.ypoints[polygon.npoints-1] +y - this.getP1().y);
+		System.out.println("test");
+		this.draw(g2d);
+		this.setP1(x, y);
+	}
+	@Override
+	public void finishTransforming(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void initResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keepResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void finishResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+	}
