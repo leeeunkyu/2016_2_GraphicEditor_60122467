@@ -1,6 +1,7 @@
 package shapes;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
 import contant.GConstants.EDrawingType;
@@ -8,9 +9,8 @@ import contant.GConstants.EDrawingType;
 public class GLine extends GShape {
 	private Line2D line;
 	public GLine() {
-		super(EDrawingType.TP);
-		this.line = new Line2D.Double(0, 0, 0, 0);
-		this.setShape(this.line);
+		super(EDrawingType.TP,new Line2D.Double(0, 0, 0, 0));
+		this.line = ( Line2D.Double)this.getShape();
 	}
 	@Override
 	public void initDrawing(int x, int y, Graphics2D g2D) {
@@ -26,6 +26,93 @@ public class GLine extends GShape {
 	}
 	@Override
 	public void finishDrawing(int x, int y, Graphics2D g2D) {
+	}
+	@Override
+	public void initTransforming(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		this.setP1(x, y);
+		this.draw(g2d);
+	}
+	@Override
+	public void keepTransforming(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		this.draw(g2d);
+		this.line.setLine(this.line.getX1()+x - this.getP1().x, this.line.getY1()+y - this.getP1().y, this.line.getX2()+ x - this.getP1().x, this.line.getY2()+y - this.getP1().y);
+		// redraw shape
+		this.draw(g2d);
+		this.setP1(x, y);
+	}
+	@Override
+	public void finishTransforming(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void initResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		this.setP1(x, y);
+		this.draw(g2d);
+		switch (this.getCurrentEAnchor()) {
+		case NN:
+			break;
+		case NE:
+			break;
+		case NW:
+			break;
+		case SS:
+			break;
+		case SE:
+			break;
+		case SW:
+			break;
+		case EE:
+			break;
+		case WW:
+			break;
+		default:
+			break;
+		}
+	}
+	@Override
+	public void keepResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		this.draw(g2d);
+		switch (this.getCurrentEAnchor()) {
+		case NN:
+			this.line.setLine(this.line.getX1(), this.line.getY1()+y - this.getP1().y, this.line.getX2(), this.line.getY2());
+			break;
+		case NE:
+			this.line.setLine(this.line.getX1(), this.line.getY1()+y - this.getP1().y,  this.line.getX2()+x- this.getP1().x, this.line.getY2());
+			break;
+		case NW:
+			this.line.setLine( this.line.getX1()+x- this.getP1().x, this.line.getY1()+y - this.getP1().y, this.line.getX2(), this.line.getY2());
+			break;
+		case SS:
+			this.line.setLine(this.line.getX1(), this.line.getY1(), this.line.getX2(), this.line.getY2()+y - this.getP1().y);
+			break;
+		case SE:
+			this.line.setLine(this.line.getX1(), this.line.getY1(), this.line.getX2()+x- this.getP1().x, this.line.getY2()+y - this.getP1().y);
+			break;
+		case SW:
+			this.line.setLine(this.line.getX1()+x- this.getP1().x, this.line.getY1(), this.line.getX2(), this.line.getY2()+y - this.getP1().y);
+			break;
+		case EE:
+			this.line.setLine(this.line.getX1(), this.line.getY1(), this.line.getX2()+x- this.getP1().x, this.line.getY2());
+			break;
+		case WW:
+			this.line.setLine(this.line.getX1()+x- this.getP1().x, this.line.getY1(), this.line.getX2(), this.line.getY2());
+			break;
+		default:
+			break;
+		}
+		// redraw shape
+		this.draw(g2d);
+		this.setP1(x, y);
+	}
+	@Override
+	public void finishResizing(int x, int y, Graphics2D g2d) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
