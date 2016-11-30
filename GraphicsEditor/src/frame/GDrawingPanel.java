@@ -32,6 +32,7 @@ public class GDrawingPanel extends JPanel {
    
    private GShape currentShape;
    private GShape currentanchor;
+   GShape consape = null; //허공에다 엥커기능쓰면 에러처리해주는거
    // associative attributes
    private GShape selectedShape;
    private Anchorstate anchor;
@@ -103,6 +104,11 @@ public class GDrawingPanel extends JPanel {
       this.shapeVector.add(this.currentShape);
    }
 	private void initTransforming(int x, int y) {
+//		try{
+//		if(anchor ==Anchorstate.anchorpush){
+//			consape=onShape(x,y);
+//		}
+//		
 		this.resetSelected();
 		Graphics2D g2D = (Graphics2D)this.getGraphics();
 		g2D.setXORMode(this.getBackground());
@@ -137,8 +143,17 @@ public class GDrawingPanel extends JPanel {
 			this.currentShape.initTransforming(x, y, g2D);
 			break;
 		}
+//		}catch(NullPointerException e){
+//			System.out.println("도형위에 엥커 기능을사용하시오2");
+//		}
+
 	}
 	private void keepTransforming(int x, int y) {
+//		try{
+//			if(anchor ==Anchorstate.anchorpush){
+//				consape=onShape(x,y);
+//			}
+//		
 		Graphics2D g2D = (Graphics2D)this.getGraphics();
 		g2D.setXORMode(this.getBackground());
 		
@@ -173,8 +188,16 @@ public class GDrawingPanel extends JPanel {
 			this.currentShape.keepTransforming(x, y, g2D);
 			break;
 		}
+//		}catch(NullPointerException e){
+//			System.out.println("도형위에 엥커 기능을사용하시오2");
+//		}
 	}
 	private void finishTransforming(int x, int y) {
+//		try{
+//			if(anchor ==Anchorstate.anchorpush){
+//				consape=onShape(x,y);
+//			}
+			
 		Graphics2D g2D = (Graphics2D)this.getGraphics();
 		g2D.setXORMode(this.getBackground());
 		switch (this.currentShape.getCurrentEAnchor()) {
@@ -210,6 +233,9 @@ public class GDrawingPanel extends JPanel {
 		}
 		this.currentShape.setSelected(true);
 		this.repaint();
+//		}catch(NullPointerException e){
+//			System.out.println("도형위에 엥커 기능을사용하시오2");
+//		}
 	}
 	private GShape onShape(int x, int y) {
 		for (GShape shape: this.shapeVector) {
@@ -275,6 +301,7 @@ public class GDrawingPanel extends JPanel {
         	 System.out.println("엥커상태 2");
         	 changeAnchors(e.getX(), e.getY());
          }
+         
       }
       private void mouse2Clicked(MouseEvent e) {
          if (eState == EState.drawingNP) {      
@@ -290,14 +317,20 @@ public class GDrawingPanel extends JPanel {
     		  System.out.println("엥커상태 3");
     		  initDrawing(e.getX(), e.getY());
     		  eState = EState.drawingTP;
-           
          }
-    	  else {
+    	  else if(anchor == Anchorstate.anchorpush){
     		  System.out.println("엥커상태 4");
 				initTransforming(e.getX(), e.getY());
 				eState = EState.transforming;
 			}
+    	}else if(eState == EState.idleNP && anchor == Anchorstate.anchorpush){
+    		
+      		  System.out.println("엥커상태 4-1");
+  				initTransforming(e.getX(), e.getY());
+  				eState = EState.transforming;
+  			
     	}
+    	
       }
       @Override
       public void mouseReleased(MouseEvent e) {
@@ -305,7 +338,7 @@ public class GDrawingPanel extends JPanel {
         	 System.out.println("엥커상태 5");
         	 finishDrawing(e.getX(), e.getY());
             eState = EState.idleTP;
-         }else if (eState == EState.transforming) {
+         }else if (eState == EState.transforming && anchor == Anchorstate.anchorpush) {
         	 System.out.println("엥커상태 6");
 				finishTransforming(e.getX(), e.getY());
 				eState = EState.idleTP;
@@ -323,7 +356,7 @@ public class GDrawingPanel extends JPanel {
       public void mouseDragged(MouseEvent e) {
          if (eState == EState.drawingTP) {      
             keepDrawing(e.getX(), e.getY());
-         }else if (eState == EState.transforming) {
+         }else if (eState == EState.transforming &&  anchor == Anchorstate.anchorpush) {
 				keepTransforming(e.getX(), e.getY());				
 			}
       }

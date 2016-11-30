@@ -53,6 +53,7 @@ abstract public class GShape {
 	}
 	public void drawAnchors(Graphics2D g2D){
 		this.selected=true;
+		System.out.println("ºÒ¸®³ª?");
 		g2D.draw(this.shape);
 		this.getAnchors().draw(g2D, this.shape.getBounds());
 	}
