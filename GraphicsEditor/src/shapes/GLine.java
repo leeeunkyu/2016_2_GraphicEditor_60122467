@@ -1,6 +1,7 @@
 package shapes;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 import contant.GConstants.EDrawingType;
 
@@ -57,5 +58,11 @@ public class GLine extends GShape {
 	public void move(int x, int y) {
 		this.line.setLine(this.line.getX1()+x-px,this.line.getY1()+y-py,this.line.getX2()+x-px,this.line.getY2()+y-py);
 		this.setPoint(x, y);
+	}
+	@Override
+	public void rotateCoordinate(double theta, Point2D rotaterAnchor) {
+		// TODO Auto-generated method stub
+		affineTransform.setToRotation(theta, rotaterAnchor.getX(), rotaterAnchor.getY());
+		shape = affineTransform.createTransformedShape(shape);
 	}
 }

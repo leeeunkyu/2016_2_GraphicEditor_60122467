@@ -56,12 +56,6 @@ public class GDrawingPanel extends JPanel {
 	   	anchor = Anchorstate.anchorpush;
    } 
 	public boolean isShapeexist() {
-		System.out.println("test");
-		System.out.println("test");
-		System.out.println("test");
-		System.out.println("test");
-		System.out.println("test");
-
 		return shapeexist;
 	}
 	public void setShapeexist(boolean shapeexist) {

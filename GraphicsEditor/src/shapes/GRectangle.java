@@ -3,6 +3,8 @@ package shapes;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import contant.GConstants.EDrawingType;
 
@@ -72,6 +74,11 @@ public class GRectangle extends GShape {
 			break;
 		}
 		this.setPoint(x, y);
+	}
+	@Override
+	public void rotateCoordinate(double theta, Point2D rotaterAnchor){
+		affineTransform.setToRotation(theta, rotaterAnchor.getX(), rotaterAnchor.getY());
+		shape = affineTransform.createTransformedShape(shape);
 	}
 	
 	

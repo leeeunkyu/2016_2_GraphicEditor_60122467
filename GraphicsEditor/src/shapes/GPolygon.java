@@ -1,6 +1,7 @@
 package shapes;
 
 import java.awt.Polygon;
+import java.awt.geom.Point2D;
 
 import contant.GConstants.EDrawingType;
 
@@ -137,5 +138,11 @@ public class GPolygon extends GShape {
 		this.polygon.invalidate();
 		px = x;
 		py = y;
+	}
+	@Override
+	public void rotateCoordinate(double theta, Point2D rotaterAnchor) {
+		// TODO Auto-generated method stub
+		affineTransform.setToRotation(theta, rotaterAnchor.getX(), rotaterAnchor.getY());
+		shape = affineTransform.createTransformedShape(shape);
 	}
 }

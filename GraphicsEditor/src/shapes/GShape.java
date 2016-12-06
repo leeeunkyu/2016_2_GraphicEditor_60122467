@@ -5,6 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
 import contant.GConstants.EAnchors;
@@ -22,6 +25,8 @@ abstract public class GShape implements Serializable{
 	private Anchors anchors;
 	private boolean selected;
 	protected int px,py;
+	protected AffineTransform affineTransform;
+
 	
 
 	public EAnchors getCurrentEAnchor() { return currentEAnchor; }
@@ -46,6 +51,8 @@ abstract public class GShape implements Serializable{
 		this.currentEAnchor = null;
 		this.px=0;
 		this.py=0;
+		affineTransform = new AffineTransform();
+
 	}
 	public Rectangle getBounds() {return shape.getBounds();}	
 	public void draw(Graphics2D g2D) {
@@ -90,6 +97,8 @@ abstract public class GShape implements Serializable{
 	abstract public void addPoint(int x, int y); 
 	abstract public void move(int x, int y);
 	abstract public void setPoint(int x, int y);
+	abstract public void rotateCoordinate(double theta, Point2D rotaterAnchor);
+		
 
 	
 }

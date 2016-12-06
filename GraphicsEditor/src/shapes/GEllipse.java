@@ -2,6 +2,8 @@ package shapes;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+
 import contant.GConstants.EDrawingType;
 public class GEllipse extends GShape {
 	
@@ -72,5 +74,11 @@ public class GEllipse extends GShape {
 			break;
 		}
 		this.setPoint(x, y);
+	}
+	@Override
+	public void rotateCoordinate(double theta, Point2D rotaterAnchor) {
+		// TODO Auto-generated method stub
+		affineTransform.setToRotation(theta, rotaterAnchor.getX(), rotaterAnchor.getY());
+		shape = affineTransform.createTransformedShape(shape);
 	}
 }
