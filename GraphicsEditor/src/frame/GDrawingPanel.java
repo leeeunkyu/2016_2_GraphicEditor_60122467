@@ -1,4 +1,5 @@
 package frame;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,6 +43,7 @@ public class GDrawingPanel extends JPanel {
    private GShape currentShape;
    private GShape currentanchor;
    private GTransformer currentTransformer;
+   private Color fillColor, lineColor;
    GShape consape = null; //허공에다 엥커기능쓰면 에러처리해주는거
    boolean shapeexist=false;
    // associative attributes
@@ -75,13 +77,37 @@ public class GDrawingPanel extends JPanel {
       this.selectedShape = null;
       this.currentShape = null;
       this.currentTransformer = null;
+  	  fillColor = GConstants.COLOR_FILL_DEFAULT;
+  	  lineColor = GConstants.COLOR_LINE_DEFAULT;
      
    }
+
+	public void setFillColor(Color fillColor) {
+		if (currentShape != null) {
+			currentShape.setFillColor(fillColor);
+			this.fillColor=fillColor;
+			repaint();
+		} else {
+			this.fillColor = fillColor;
+			System.out.println(fillColor+"???");
+
+		}
+	}
+
+	public void setLineColor(Color lineColor) {
+		if (currentShape != null) {
+			currentShape.setLineColor(lineColor);
+			this.lineColor = lineColor;
+			repaint();
+		} else {
+			this.lineColor = lineColor;
+		}
+	}
    public void intitpanel() {
 		// TODO Auto-generated method stub
 	   shapeVector.clear();
-		repaint();
-		this.setShapeexist(false);
+	   repaint();
+	   this.setShapeexist(false);
 	}
    public void initialize() {
       // TODO Auto-generated method stub
@@ -95,11 +121,13 @@ public class GDrawingPanel extends JPanel {
       for(GShape anc : this.anchorVector){
     	  anc.draw((Graphics2D)g);
       }
+      
    } 
 	private void resetSelected() {
 		for (GShape shape: this.shapeVector) {
 			shape.setSelected(false);
 		}
+		
 		this.repaint();
 	}
 	private void initTransforming(int x, int y) {

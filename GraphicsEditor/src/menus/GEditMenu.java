@@ -14,6 +14,7 @@ public class GEditMenu extends JMenu {
 		super(GConstants.EDITMENU_TITLE);
 		for (GConstants.EEditMenuItem eMenuItem: GConstants.EEditMenuItem.values()) {
 			JMenuItem menuItem = new JMenuItem(eMenuItem.getText());
+			
 			this.add(menuItem);
 		}
 	}

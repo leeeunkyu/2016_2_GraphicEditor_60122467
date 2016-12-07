@@ -1,5 +1,6 @@
 package shapes;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -26,12 +27,18 @@ abstract public class GShape implements Serializable{
 	private boolean selected;
 	protected int px,py;
 	protected AffineTransform affineTransform;
-
-	
-
+	private Color lineColor, fillColor;
 	public EAnchors getCurrentEAnchor() { return currentEAnchor; }
 	public Shape getShape() {return shape;}
 	public void setShape(Shape shape) {this.shape = shape;}
+	
+	public Color getLineColor() {
+		return lineColor;
+	}
+
+	public Color getFillColor() {
+		return fillColor;
+	}
 
 	public Anchors getAnchors() {
 		return anchors;
@@ -51,19 +58,49 @@ abstract public class GShape implements Serializable{
 		this.currentEAnchor = null;
 		this.px=0;
 		this.py=0;
+		
 		affineTransform = new AffineTransform();
+
+	}
+	public void setFillColor(Color fillColor) {
+		// TODO Auto-generated method stub
+		System.out.println(fillColor+"222");
+		this.fillColor = fillColor;
+	}
+	public void setLineColor(Color lineColor) {
+		// TODO Auto-generated method stub
+		this.lineColor = lineColor;
 
 	}
 	public Rectangle getBounds() {return shape.getBounds();}	
 	public void draw(Graphics2D g2D) {
-		
+		if (fillColor != null) {
+			g2D.setColor(fillColor);
+			g2D.fill(shape);
+		}
+		if (lineColor != null) {
+			g2D.setColor(lineColor);
+			//g2D.draw(shape);
+		}
 		if(selected){
 			g2D.draw(this.shape);
 			this.anchors.draw(g2D, this.shape.getBounds());
-		}else
+		}else{
 			g2D.draw(this.shape);
+			System.out.println(fillColor+"777");
+		}
 	}
 	public void drawAnchors(Graphics2D g2D){
+		if (fillColor != null) {
+			g2D.setColor(fillColor);
+			g2D.fill(shape);
+		}
+		if (lineColor != null) {
+			g2D.setColor(lineColor);
+		//	g2D.draw(shape);
+		}
+		System.out.println(fillColor+"444");
+
 		this.selected=true;
 		System.out.println("ºÒ¸®³ª?");
 		g2D.draw(this.shape);
@@ -98,6 +135,7 @@ abstract public class GShape implements Serializable{
 	abstract public void move(int x, int y);
 	abstract public void setPoint(int x, int y);
 	abstract public void rotateCoordinate(double theta, Point2D rotaterAnchor);
+
 		
 
 	

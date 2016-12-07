@@ -8,6 +8,7 @@ import shapes.GLine;
 import shapes.GPolygon;
 import shapes.GRectangle;
 
+import java.awt.Color;
 import java.awt.Cursor;
 
 import shapes.Anchors;
@@ -51,6 +52,9 @@ public class GConstants {
 	public final static String MAINFRAME_TITLE = "GraphicsEditor";
 	public final static String FILEMENU_TITLE = "File";
 	public final static String EDITMENU_TITLE = "Edit";
+	public final static String COLORMENU_TITLE = "Color";
+	public static final Color COLOR_LINE_DEFAULT = Color.black;
+	public static final Color COLOR_FILL_DEFAULT = Color.white;
 
 	public static enum EMainFrame{
 		X(100),	Y(100),	W(400),	H(600);
@@ -59,6 +63,15 @@ public class GConstants {
 			this.value = value;
 		}
 		public int getValue(){return this.value;}
+	}
+	public static enum EColorMenuItem{
+		line("line"),
+		fill("fill");
+		private String text;
+		private EColorMenuItem(String text){
+			this.text=text;
+		}
+		public String getText(){return this.text;}
 	}
 	public static enum EFileMenuItem{
 		newItem("new"),
