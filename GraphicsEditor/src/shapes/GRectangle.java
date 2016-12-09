@@ -7,12 +7,15 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import contant.GConstants.EDrawingType;
+import frame.GDrawingPanel;
 
 public class GRectangle extends GShape {
 	private Rectangle rectangle;
+	private GDrawingPanel drawingPanel;
 	public GRectangle() {
 		super(EDrawingType.TP, new Rectangle(0, 0, 0, 0));
 		this.rectangle = (Rectangle)this.getShape();
+		this.drawingPanel=new GDrawingPanel();
 	}
 	public void setOrigin(int x, int y) {
 		this.rectangle.setLocation(x, y);
@@ -80,6 +83,7 @@ public class GRectangle extends GShape {
 		affineTransform.setToRotation(theta, rotaterAnchor.getX(), rotaterAnchor.getY());
 		shape = affineTransform.createTransformedShape(shape);
 	}
+	
 	
 	
 }

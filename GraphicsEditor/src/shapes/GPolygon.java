@@ -134,6 +134,8 @@ public class GPolygon extends GShape {
 		for (int i=0; i<this.polygon.npoints; i++) {
 			this.polygon.xpoints[i] += x - px;
 			this.polygon.ypoints[i] += y - py;
+			System.out.println(this.polygon.xpoints[i]+"x");
+			System.out.println(this.polygon.ypoints[i]+"y");
 		}
 		this.polygon.invalidate();
 		px = x;

@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import contant.GConstants;
 import contant.GConstants.EMainFrame;
+import shapes.GText;
 
 // MainFrame specialize JFrame
 public class GMainFrame extends JFrame {
@@ -21,16 +22,15 @@ public class GMainFrame extends JFrame {
 		this.setLocation(EMainFrame.X.getValue(), EMainFrame.Y.getValue());
 		this.setSize(new Dimension(EMainFrame.W.getValue(), EMainFrame.H.getValue()));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		// component creation & registration
 		this.menuBar = new GMenuBar();
 		this.setJMenuBar(menuBar);
-		
 		this.getContentPane().setLayout(new BorderLayout());
 		this.toolBar = new GToolBar();
 		this.add(toolBar, BorderLayout.NORTH);
 		this.drawingPanel = new GDrawingPanel();
 		this.add(drawingPanel, BorderLayout.CENTER);
+		//this.add(new GText(),BorderLayout.EAST);
 	}	
 	public void initialize() {
 		// component initialization

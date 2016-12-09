@@ -3,7 +3,9 @@ package contant;
 
 
 import shapes.GEllipse;
+import shapes.GHeart;
 import shapes.GShape;
+import shapes.GText;
 import shapes.GLine;
 import shapes.GPolygon;
 import shapes.GRectangle;
@@ -109,7 +111,8 @@ public class GConstants {
 		rectangle("rsc/rectangle.gif","rsc/rectangleSLT.gif", new GRectangle()),
 		ellipse("rsc/ellipse.gif","rsc/ellipseSLT.gif",new GEllipse()),
 		line("rsc/line.gif","rsc/lineSLT.gif",new GLine()),
-		polygon("rsc/polygon.gif","rsc/polygonSLT.gif", new GPolygon());		
+		polygon("rsc/polygon.gif","rsc/polygonSLT.gif", new GPolygon()),
+		heart("rsc/heart.gif","rsc/heartSLT.gif", new GHeart());
 		private String iconName;
 		private String selectedIconName;
 		private GShape shape;

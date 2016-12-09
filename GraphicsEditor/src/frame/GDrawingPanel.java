@@ -1,13 +1,17 @@
 package frame;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.TextArea;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 
 import contant.GConstants;
@@ -16,6 +20,7 @@ import contant.GConstants.EDrawingType;
 import shapes.GCurSor;
 import shapes.Anchors;
 import shapes.GShape;
+import shapes.GText;
 import transformer.GDrawer;
 import transformer.GMover;
 import transformer.GResizer;
@@ -28,10 +33,11 @@ public class GDrawingPanel extends JPanel {
    // object states
    private enum EState {idle,drawingTP,drawingNP,transforming};
    private enum Anchorstate {anchorready,anchorpush};
+   private enum Textstate {textready,textepush};
    //components;
    public Vector<GShape> shapeVector;
    public Vector<GShape> anchorVector;
-   public Vector<GShape> getShapeVector() { return this.shapeVector; }
+   public Vector<GShape> getShapeVector() { repaint(); return this.shapeVector; }
 	public void setShapeManagers(Vector<GShape> shapeVector) {
 		this.shapeVector = shapeVector;
 		repaint();
@@ -40,7 +46,7 @@ public class GDrawingPanel extends JPanel {
    Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
    Cursor hourglass = new Cursor(Cursor.DEFAULT_CURSOR);
    // working variables
-   private GShape currentShape;
+   public GShape currentShape;
    private GShape currentanchor;
    private GTransformer currentTransformer;
    private Color fillColor, lineColor;
@@ -49,13 +55,20 @@ public class GDrawingPanel extends JPanel {
    // associative attributes
    private GShape selectedShape;
    private Anchorstate anchor;
+   public Textstate textstate;
+   protected GText text;
    private EState eState=EState.idle;
    public void setSelectedShape(GShape selectedShape) {
       this.selectedShape = selectedShape;
       anchor = Anchorstate.anchorready;
    }
-   public void setSelectedSkill(){
+   public void setSelectedSkill(String action){
+	   if(action.equals("anchor"))
 	   	anchor = Anchorstate.anchorpush;
+	   else{
+		textstate=Textstate.textepush;
+		
+	   }
    } 
 	public boolean isShapeexist() {
 		return shapeexist;
@@ -63,8 +76,6 @@ public class GDrawingPanel extends JPanel {
 	public void setShapeexist(boolean shapeexist) {
 		this.shapeexist = shapeexist;
 	}
-   
-   
    public GDrawingPanel() {
 	  super();
 	  //attribute
@@ -79,9 +90,7 @@ public class GDrawingPanel extends JPanel {
       this.currentTransformer = null;
   	  fillColor = GConstants.COLOR_FILL_DEFAULT;
   	  lineColor = GConstants.COLOR_LINE_DEFAULT;
-     
    }
-
 	public void setFillColor(Color fillColor) {
 		if (currentShape != null) {
 			currentShape.setFillColor(fillColor);
@@ -90,7 +99,7 @@ public class GDrawingPanel extends JPanel {
 		} else {
 			this.fillColor = fillColor;
 			System.out.println(fillColor+"???");
-
+			
 		}
 	}
 
@@ -103,6 +112,7 @@ public class GDrawingPanel extends JPanel {
 			this.lineColor = lineColor;
 		}
 	}
+
    public void intitpanel() {
 		// TODO Auto-generated method stub
 	   shapeVector.clear();
@@ -115,22 +125,25 @@ public class GDrawingPanel extends JPanel {
    }
    public void paint(Graphics g) {
 	  super.paint(g);
+	  
+	  System.out.println("페인트호출");
       for(GShape shape : this.shapeVector){
          shape.draw((Graphics2D)g);
       }
-      for(GShape anc : this.anchorVector){
-    	  anc.draw((Graphics2D)g);
-      }
+//      for(GShape anc : this.anchorVector){
+//    	  anc.draw((Graphics2D)g);
+//      }
       
    } 
-	private void resetSelected() {
+	public void resetSelected() {
 		for (GShape shape: this.shapeVector) {
 			shape.setSelected(false);
 		}
-		
 		this.repaint();
 	}
 	private void initTransforming(int x, int y) {
+  	  System.out.println("init");
+
 		if (this.currentShape == null) {
 			this.currentShape= this.selectedShape.clone();
 			this.currentTransformer = new GDrawer(this.currentShape);
@@ -187,7 +200,18 @@ public class GDrawingPanel extends JPanel {
 		}  
 	   }
    }
-   
+   private void textinit(int x,int y){
+	   System.out.println("texttest");
+	   text=new GText();
+
+	   text.initsize(x, y);
+   }
+   private void textfinsh(int x,int y){
+	   this.add(text);
+	   super.revalidate();			//리페인트같은거
+	   text.finshsize(x, y);
+	   System.out.println("area");
+   }
    private void changeCursor(GShape shape) {
 		if (shape == null) {
 			this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -203,13 +227,13 @@ public class GDrawingPanel extends JPanel {
 
       @Override
       public void mouseClicked(MouseEvent e) {
-         if(e.getClickCount() == 1){
+    	 if(e.getClickCount() == 1){
             mouse1Clicked(e);
          }else if(e.getClickCount() == 2){
             mouse2Clicked(e);
          }
       }
-      private void mouse1Clicked(MouseEvent e) {
+	private void mouse1Clicked(MouseEvent e) {
          if (eState == EState.idle && anchor == Anchorstate.anchorready ) {
                	if(selectedShape.geteDrawingType() == EDrawingType.NP){
                		initTransforming(e.getX(), e.getY());
@@ -231,7 +255,11 @@ public class GDrawingPanel extends JPanel {
       }
       @Override
       public void mousePressed(MouseEvent e) {
-    	  System.out.println(eState.toString());
+    	if(textstate==Textstate.textepush){
+    		textinit(e.getX(),e.getY());
+    		System.out.println(e.getX()+"  "+e.getY());
+    	}
+    	else{
     	if (eState == EState.idle) {
     		 System.out.println("te1");
     		currentShape = onShape(e.getX(), e.getY());
@@ -252,17 +280,25 @@ public class GDrawingPanel extends JPanel {
   				eState = EState.transforming;
   			
     	}
+    	}
     	
       }
       @Override
       public void mouseReleased(MouseEvent e) {
-         if (eState == EState.drawingTP && anchor == Anchorstate.anchorready) {      
+         if(textstate==Textstate.textepush){
+        	 textfinsh(e.getX(),e.getY());
+     		System.out.println(e.getX()+"  "+e.getY());
+         }else{
+        	 
+         
+    	  if (eState == EState.drawingTP && anchor == Anchorstate.anchorready) {      
         	 finishTransforming(e.getX(), e.getY());
             eState = EState.idle;
          }else if (eState == EState.transforming && anchor == Anchorstate.anchorpush) {
         		finishTransforming(e.getX(), e.getY());
 				eState = EState.idle;
-			} 
+			}
+         }
       }
       @Override
       public void mouseMoved(MouseEvent e) {

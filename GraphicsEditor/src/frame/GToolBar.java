@@ -32,7 +32,14 @@ public class GToolBar extends JToolBar {
 		button.setIcon(new ImageIcon("rsc/anchor.gif"));
 		button.setSelectedIcon(new ImageIcon("rsc/anchorSLT.gif"));
 		this.add(button);
+		JRadioButton button2 = new JRadioButton();
+		button2.setIcon(new ImageIcon("rsc/text.gif"));
+		button2.setSelectedIcon(new ImageIcon("rsc/textSLT.gif"));
+		this.add(button2);
+		button2.addActionListener(actionHandler);
+		button2.setActionCommand("text");
 		buttonGroup.add(button);
+		buttonGroup.add(button2);
 		button.addActionListener(actionHandler);
 		button.setActionCommand("anchor");
 	}
@@ -44,8 +51,11 @@ public class GToolBar extends JToolBar {
 	public class ActionHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals("anchor")){
-				drawingPanel.setSelectedSkill();
+			if(e.getActionCommand().equals("text")){
+				drawingPanel.setSelectedSkill(e.getActionCommand());
+			}
+			else if(e.getActionCommand().equals("anchor")){
+				drawingPanel.setSelectedSkill(e.getActionCommand());
 			}else{
 				drawingPanel.setSelectedShape(
 						EToolBarButton.valueOf(e.getActionCommand()).getShape());
