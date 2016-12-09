@@ -49,7 +49,6 @@ public class GConstants {
 		public Cursor getCursor(){
 			return this.cursor;
 		}
-		
 	};
 	public final static String MAINFRAME_TITLE = "GraphicsEditor";
 	public final static String FILEMENU_TITLE = "File";

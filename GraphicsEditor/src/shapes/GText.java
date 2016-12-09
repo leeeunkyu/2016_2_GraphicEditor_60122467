@@ -36,7 +36,6 @@ public class GText extends  GDrawingPanel{
 		//27:34=600:400
 		ta.setBounds(0,0,0,0);
 		add(new JScrollPane(ta));
-		
 		System.out.println("ªÁ¿Ã¡Ó"+(x-x1)+"  "+(y-y1));
 	}
 }
