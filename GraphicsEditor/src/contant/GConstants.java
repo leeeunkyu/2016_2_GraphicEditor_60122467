@@ -5,15 +5,12 @@ package contant;
 import shapes.GEllipse;
 import shapes.GHeart;
 import shapes.GShape;
-import shapes.GText;
 import shapes.GLine;
+import shapes.GPencile;
 import shapes.GPolygon;
 import shapes.GRectangle;
-
 import java.awt.Color;
 import java.awt.Cursor;
-
-import shapes.Anchors;
 import shapes.GCurSor;
 
 public class GConstants {
@@ -22,26 +19,16 @@ public class GConstants {
 	public final static int MAINFRAME_W = 400;
 	public final static int MAINFRAME_H = 600;
 	public enum EAnchors {
-//		NN(setCursor(GCurSor.N_RESIZE())), 
-//		NE(this.setCursor(GCurSor.NE_RESIZE())),
-//		NW(this.setCursor(GCurSor.NW_RESIZE())),
-//		SS(this.setCursor(GCurSor.S_RESIZE())),
-//		SE(this.setCursor(GCurSor.SE_RESIZE())),
-//		SW(this.setCursor(GCurSor.SW_RESIZE())),
-//		EE(this.setCursor(GCurSor.E_RESIZE())),
-//		WW(this.setCursor(GCurSor.W_RESIZE())),
-//		RR(this.setCursor(GCurSor.RR())),
-//		MM(this.setCursor(GCurSor.MOVE()));
-		NN(new Cursor(Cursor.N_RESIZE_CURSOR)), 
-		NE(new Cursor(Cursor.NE_RESIZE_CURSOR)), 
-		NW(new Cursor(Cursor.NW_RESIZE_CURSOR)), 
-		SS(new Cursor(Cursor.S_RESIZE_CURSOR)), 
-		SE(new Cursor(Cursor.SE_RESIZE_CURSOR)), 
-		SW(new Cursor(Cursor.SW_RESIZE_CURSOR)), 
-		EE(new Cursor(Cursor.E_RESIZE_CURSOR)), 
-		WW(new Cursor(Cursor.W_RESIZE_CURSOR)), 
-		RR(new Cursor(Cursor.HAND_CURSOR)), 
-		MM(new Cursor(Cursor.MOVE_CURSOR));
+		NN(GCurSor.N_RESIZE()), 
+		NE(GCurSor.NE_RESIZE()), 
+		NW(GCurSor.NW_RESIZE()), 
+		SS(GCurSor.S_RESIZE()), 
+		SE(GCurSor.SE_RESIZE()), 
+		SW(GCurSor.SW_RESIZE()), 
+		EE(GCurSor.E_RESIZE()), 
+		WW(GCurSor.W_RESIZE()), 
+		RR(GCurSor.RR()), 
+		MM(GCurSor.MOVE());
 		private Cursor cursor;
 		private EAnchors(Cursor cursor){
 			this.cursor=cursor;
@@ -80,7 +67,9 @@ public class GConstants {
 		close("close"),
 		save("save"),
 		saveAs("saveAs"),
-		exit("exit");
+		exit("exit"),
+		shapeinfo("shapeinfo"),
+		fullscreen("fullscreen");
 		private String text;
 		private EFileMenuItem(String text){
 			this.text = text;
@@ -111,7 +100,8 @@ public class GConstants {
 		ellipse("rsc/ellipse.gif","rsc/ellipseSLT.gif",new GEllipse()),
 		line("rsc/line.gif","rsc/lineSLT.gif",new GLine()),
 		polygon("rsc/polygon.gif","rsc/polygonSLT.gif", new GPolygon()),
-		heart("rsc/heart.gif","rsc/heartSLT.gif", new GHeart());
+		heart("rsc/heart.gif","rsc/heartSLT.gif", new GHeart()),
+		pencile("rsc/pencile.gif","rsc/pencileSLT.gif",new GPencile());
 		private String iconName;
 		private String selectedIconName;
 		private GShape shape;

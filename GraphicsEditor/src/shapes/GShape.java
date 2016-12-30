@@ -20,12 +20,20 @@ abstract public class GShape implements Serializable,Cloneable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public GGroupManager getGroupShapes() {
+		return groupShapes;
+	}
+	public void setGroupShapes(GGroupManager groupShapes) {
+		this.groupShapes = groupShapes;
+	}
 	protected Shape shape;
 	private EDrawingType eDrawingType;
 	private EAnchors currentEAnchor;
-	private Anchors anchors;
-	private boolean selected;
-	protected int px,py;
+	public GGroupManager groupShapes;
+	protected Anchors anchors;
+	protected boolean selected;
+	double px;
+	protected double py;
 	protected AffineTransform affineTransform;
 	private Color lineColor, fillColor;
 	public EAnchors getCurrentEAnchor() { return currentEAnchor; }
@@ -34,11 +42,9 @@ abstract public class GShape implements Serializable,Cloneable{
 	public Color getLineColor() {
 		return lineColor;
 	}
-
 	public Color getFillColor() {
 		return fillColor;
 	}
-
 	public Anchors getAnchors() {
 		return anchors;
 	}
@@ -56,6 +62,7 @@ abstract public class GShape implements Serializable,Cloneable{
 		this.currentEAnchor = null;
 		this.px=0;
 		this.py=0;
+		this.groupShapes=null;
 		affineTransform = new AffineTransform();
 	}
 	public void setFillColor(Color fillColor) {
@@ -68,43 +75,31 @@ abstract public class GShape implements Serializable,Cloneable{
 	}
 	public Rectangle getBounds() {return shape.getBounds();}	
 	public void draw(Graphics2D g2D) {
-		System.out.println(this.shape);
-//		if (fillColor != null) {
-//			g2D.setColor(fillColor);
-//			g2D.fill(shape);
-//		}
-//		if (lineColor != null) {
-//			g2D.setColor(lineColor);
-//			//g2D.draw(shape);
-//		}						이거 주석지우고 밑에있는거 주석하면 전부다 색먹히게바뀜
+		if (fillColor != null) {
+			g2D.setColor(fillColor);
+			g2D.fill(shape);
+		}
+		if (this.lineColor != null) {
+			g2D.setColor(this.lineColor);
+		
+			//g2D.draw(shape);
+		}					//	이거 주석지우고 밑에있는거 주석하면 전부다 색먹히게바뀜
 		if(selected){
-			if (fillColor != null) {
-				g2D.setColor(fillColor);
-				g2D.fill(shape);
-			}
-			if (lineColor != null) {
-				g2D.setColor(lineColor);
-				//g2D.draw(shape);
-			}
+//			if (fillColor != null) {
+//				g2D.setColor(fillColor);
+//				g2D.fill(shape);
+//			}
+//			if (lineColor != null) {
+//				g2D.setColor(lineColor);
+//				//g2D.draw(shape);
+//			}
 			g2D.draw(this.shape);
 			this.anchors.draw(g2D, this.shape.getBounds());
 		}else{
 			g2D.draw(this.shape);
 		}
 	}
-	public void drawAnchors(Graphics2D g2D){
-		if (fillColor != null) {
-			g2D.setColor(fillColor);
-			g2D.fill(shape);
-		}
-		if (lineColor != null) {
-			g2D.setColor(lineColor);
-		//	g2D.draw(shape);
-		}
-		this.selected=true;
-//		g2D.draw(this.shape);
-//		this.anchors.draw(g2D, this.shape.getBounds());
-	}
+
 	public GShape clone() {
 		try {
 			return this.getClass().newInstance();
@@ -129,13 +124,21 @@ abstract public class GShape implements Serializable,Cloneable{
 		return this.shape.getBounds2D().contains(x, y);
 	}
 	public GShape clone2() throws CloneNotSupportedException
-    {
+    
+	{
         return (GShape) super.clone();
-    }	
+    }
+	
 	abstract public void setOrigin(int x, int y);
-	abstract public void resize(int x, int y);
+	abstract public void resize(double x, double y);
 	abstract public void addPoint(int x, int y); 
-	abstract public void move(int x, int y);
-	abstract public void setPoint(int x, int y);
-	abstract public void rotateCoordinate(double theta, Point2D rotaterAnchor);	
+	abstract public void move(double d, double e);
+	abstract public void setPoint(double x, double y);
+	abstract public void rotateCoordinate(double theta, Point2D rotaterAnchor);
+	public void moveReverse(Point resizeAnchor) {
+		// TODO Auto-generated method stub
+		affineTransform.setToTranslation(-resizeAnchor.getX(), -resizeAnchor.getY());
+		shape = affineTransform.createTransformedShape(shape);
+	}
+
 }

@@ -24,15 +24,15 @@ public class GRotator extends GTransformer {
 		this.getShape().setPoint(x, y);
 		this.getShape().draw(g2d);
 	}
-
 	@Override
 	public void keepTransforming(int x, int y, Graphics2D g2d) {
 		double theta2 = theta - Math.atan2(ROrigin.y - y, x - ROrigin.x);
+		//atan2(a,b)=>a/b
+		g2d.setStroke(LineStroke);
 		shape.draw(g2d);
 		shape.rotateCoordinate(theta2, ROrigin);
 		shape.draw(g2d);
 		theta = Math.atan2(ROrigin.y - y, x - ROrigin.x);
-
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package frame;
 public class GMain {
 
-	public static void main(String[] args) {
+	public void GraphicsEditor() {
 		// object name & body created & bound
 		GMainFrame mainFrame = new GMainFrame();
 		mainFrame.initialize();

@@ -8,7 +8,6 @@ import javax.swing.JToolBar;
 
 import contant.GConstants.EToolBarButton;
 import frame.GDrawingPanel;
-import shapes.Anchors;
 
 public class GToolBar extends JToolBar {
 	private static final long serialVersionUID = 1L;
@@ -59,6 +58,7 @@ public class GToolBar extends JToolBar {
 			}else{
 				drawingPanel.setSelectedShape(
 						EToolBarButton.valueOf(e.getActionCommand()).getShape());
+				drawingPanel.textstate=drawingPanel.textstate.textready;
 				
 			}
 		}

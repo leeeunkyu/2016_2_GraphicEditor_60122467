@@ -27,9 +27,11 @@ public class GMainFrame extends JFrame {
 		this.setJMenuBar(menuBar);
 		this.getContentPane().setLayout(new BorderLayout());
 		this.toolBar = new GToolBar();
+		toolBar.setFloatable(false);
 		this.add(toolBar, BorderLayout.NORTH);
 		this.drawingPanel = new GDrawingPanel();
 		this.add(drawingPanel, BorderLayout.CENTER);
+
 		//this.add(new GText(),BorderLayout.EAST);
 	}	
 	public void initialize() {

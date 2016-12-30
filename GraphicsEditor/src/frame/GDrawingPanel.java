@@ -1,24 +1,21 @@
 package frame;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.TextArea;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.Serializable;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 
 import contant.GConstants;
 import contant.GConstants.EAnchors;
 import contant.GConstants.EDrawingType;
-import shapes.GCurSor;
-import shapes.Anchors;
+import shapes.GGroupManager;
 import shapes.GShape;
 import shapes.GText;
 import transformer.GDrawer;
@@ -27,16 +24,20 @@ import transformer.GResizer;
 import transformer.GRotator;
 import transformer.GTransformer;
 
-public class GDrawingPanel extends JPanel {
+public class GDrawingPanel extends JPanel implements Serializable{
    // attributes
    private static final long serialVersionUID = 1L;
    // object states
    private enum EState {idle,drawingTP,drawingNP,transforming};
    private enum Anchorstate {anchorready,anchorpush};
-   private enum Textstate {textready,textepush};
+   public enum Textstate {textready,textepush};
    //components;
    public Vector<GShape> shapeVector;
    public Vector<GShape> anchorVector;
+   private Stack<Vector<GShape>> redo;
+   private Stack<Vector<GShape>> undo;
+	private Vector<GShape> groupList;
+
    public Vector<GShape> getShapeVector() { repaint(); return this.shapeVector; }
 	public void setShapeManagers(Vector<GShape> shapeVector) {
 		this.shapeVector = shapeVector;
@@ -47,9 +48,7 @@ public class GDrawingPanel extends JPanel {
    Cursor hourglass = new Cursor(Cursor.DEFAULT_CURSOR);
    // working variables
    public GShape currentShape;
-   private GShape currentanchor;
    private GTransformer currentTransformer;
-   private Color fillColor, lineColor;
    GShape consape = null; //허공에다 엥커기능쓰면 에러처리해주는거
    boolean shapeexist=false;
    // associative attributes
@@ -58,16 +57,19 @@ public class GDrawingPanel extends JPanel {
    public Textstate textstate;
    protected GText text;
    private EState eState=EState.idle;
+private Color lineColor;
    public void setSelectedShape(GShape selectedShape) {
       this.selectedShape = selectedShape;
       anchor = Anchorstate.anchorready;
    }
    public void setSelectedSkill(String action){
-	   if(action.equals("anchor"))
+	   if(action.equals("anchor")){
 	   	anchor = Anchorstate.anchorpush;
-	   else{
+		textstate=Textstate.textready;
+
+	   }else{
 		textstate=Textstate.textepush;
-		
+		anchor=Anchorstate.anchorready;
 	   }
    } 
 	public boolean isShapeexist() {
@@ -76,41 +78,88 @@ public class GDrawingPanel extends JPanel {
 	public void setShapeexist(boolean shapeexist) {
 		this.shapeexist = shapeexist;
 	}
-   public GDrawingPanel() {
+   @SuppressWarnings("unchecked")
+public GDrawingPanel() {
 	  super();
 	  //attribute
 	  //components
 	  shapeVector = new Vector<GShape>();
       anchorVector = new Vector<GShape>();
+      redo = new Stack<Vector<GShape>>();
+      undo = new Stack<Vector<GShape>>();
+      undo.add((Vector<GShape>) shapeVector.clone());
       this.mouseEventHandler = new MouseEventHandler();
       this.addMouseListener(mouseEventHandler);
       this.addMouseMotionListener(mouseEventHandler);
       this.selectedShape = null;
       this.currentShape = null;
       this.currentTransformer = null;
-  	  fillColor = GConstants.COLOR_FILL_DEFAULT;
-  	  lineColor = GConstants.COLOR_LINE_DEFAULT;
+      groupList = new Vector<GShape>();
    }
+   public void group(GGroupManager group) {
+		boolean check = false;
+   	for(int i = shapeVector.size(); i > 0; i--) {
+   		GShape cShapeManager = shapeVector.get(i - 1);
+   		if(cShapeManager.isSelected()) {
+   			cShapeManager.setSelected(false);
+   			group.add(cShapeManager);
+   			shapeVector.remove(cShapeManager);	
+   			check = true;
+   		}
+   	}
+   	if(check) {
+   		group.setSelected(true);
+   		shapeVector.add(group);
+   	}
+   	groupList = group.getGroupList();
+   	System.out.println(shapeVector+"test");
+   	repaint();
+	}
+   @SuppressWarnings("unchecked")
+public void redo() {
+	   //되돌리기
+		if(redo.size() != 0) {
+			undo.add((Vector<GShape>)shapeVector.clone());
+			shapeVector = redo.pop();
+			repaint();
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public void undo() {
+		//지우기
+		if(undo.size() != 0) {
+			redo.add((Vector<GShape>)shapeVector.clone());
+			shapeVector = undo.pop();
+			repaint();		
+		}
+	}
 	public void setFillColor(Color fillColor) {
 		if (currentShape != null) {
 			currentShape.setFillColor(fillColor);
-			this.fillColor=fillColor;
 			repaint();
 		} else {
-			this.fillColor = fillColor;
-			System.out.println(fillColor+"???");
-			
 		}
 	}
-
-	public void setLineColor(Color lineColor) {
-		if (currentShape != null) {
-			currentShape.setLineColor(lineColor);
-			this.lineColor = lineColor;
-			repaint();
-		} else {
-			this.lineColor = lineColor;
+	public boolean colorSelection(boolean flag, Color color) {
+		boolean returnValue = false;
+		for (GShape colorShape : shapeVector) {
+			if (colorShape.isSelected()) {
+				if (flag) {
+					colorShape.setLineColor(color);
+				} else {
+					colorShape.setFillColor(color);
+				}
+				returnValue = true;
+			}
 		}
+		repaint();
+		return returnValue;
+	}
+	public void setLineColor(Color lineColor) {
+		if (colorSelection(true, lineColor)) {
+			return;
+		}
+		this.lineColor = lineColor;
 	}
 
    public void intitpanel() {
@@ -121,19 +170,13 @@ public class GDrawingPanel extends JPanel {
 	}
    public void initialize() {
       // TODO Auto-generated method stub
-      
+
    }
    public void paint(Graphics g) {
 	  super.paint(g);
-	  
-	  System.out.println("페인트호출");
-      for(GShape shape : this.shapeVector){
+	        for(GShape shape : this.shapeVector){
          shape.draw((Graphics2D)g);
       }
-//      for(GShape anc : this.anchorVector){
-//    	  anc.draw((Graphics2D)g);
-//      }
-      
    } 
 	public void resetSelected() {
 		for (GShape shape: this.shapeVector) {
@@ -143,8 +186,7 @@ public class GDrawingPanel extends JPanel {
 	}
 	private void initTransforming(int x, int y) {
   	  System.out.println("init");
-
-		if (this.currentShape == null) {
+  	  if (this.currentShape == null) {
 			this.currentShape= this.selectedShape.clone();
 			this.currentTransformer = new GDrawer(this.currentShape);
 		} else if (this.currentShape.getCurrentEAnchor() == EAnchors.MM) {
@@ -170,12 +212,18 @@ public class GDrawingPanel extends JPanel {
 		g2D.setXORMode(this.getBackground());
 		this.currentTransformer.continueTransforming(x, y, g2D);
 	}
+	@SuppressWarnings("unchecked")
 	private void finishTransforming(int x, int y) {
 		Graphics2D g2D = (Graphics2D)this.getGraphics();
 		g2D.setXORMode(this.getBackground());
 		this.currentTransformer.finishTransforming(x, y, g2D);
 		if (this.currentTransformer.getClass().getSimpleName().equals("GDrawer")) {
+			undo.add((Vector<GShape>) shapeVector.clone());
+			redo.clear();
 			this.shapeVector.add(this.currentShape);
+		}else{
+			undo.add((Vector<GShape>) shapeVector.clone());
+			redo.clear();			
 		}
 		this.setShapeexist(true);
 		this.currentShape.setSelected(true);
@@ -192,25 +240,23 @@ public class GDrawingPanel extends JPanel {
    private void changeAnchors(int x, int y){
 	   for (int i=0;i<shapeVector.size();i++) {
 		   if(anchor == Anchorstate.anchorpush && shapeVector.get(i).contains2(x, y)){
-			   Graphics2D g2D = (Graphics2D) this.getGraphics();
-			   shapeVector.get(i).drawAnchors(g2D);
-			   //this.currentShape = this.selectedShape.clone();
+			   shapeVector.get(i).setSelected(true);
+			   System.out.println("true로만들어줌");
 			   this.shapeVector.add(this.currentShape);
 			   break;  
 		}  
 	   }
+	   repaint();
    }
    private void textinit(int x,int y){
-	   System.out.println("texttest");
 	   text=new GText();
-
 	   text.initsize(x, y);
    }
    private void textfinsh(int x,int y){
 	   this.add(text);
 	   super.revalidate();			//리페인트같은거
 	   text.finshsize(x, y);
-	   System.out.println("area");
+	 //  text.setBounds(100,100,100,400);
    }
    private void changeCursor(GShape shape) {
 		if (shape == null) {
@@ -223,9 +269,13 @@ public class GDrawingPanel extends JPanel {
 	 */
 	}
    
-   class MouseEventHandler implements MouseInputListener, MouseMotionListener {
+   class MouseEventHandler implements MouseInputListener, MouseMotionListener,Serializable {
 
-      @Override
+      /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Override
       public void mouseClicked(MouseEvent e) {
     	 if(e.getClickCount() == 1){
             mouse1Clicked(e);
@@ -257,25 +307,20 @@ public class GDrawingPanel extends JPanel {
       public void mousePressed(MouseEvent e) {
     	if(textstate==Textstate.textepush){
     		textinit(e.getX(),e.getY());
-    		System.out.println(e.getX()+"  "+e.getY());
     	}
     	else{
     	if (eState == EState.idle) {
-    		 System.out.println("te1");
     		currentShape = onShape(e.getX(), e.getY());
-    		 System.out.println("te2");
     	  if (currentShape == null && anchor == Anchorstate.anchorready) {
              	if(selectedShape.geteDrawingType() == EDrawingType.TP){
              		initTransforming(e.getX(), e.getY());
              		eState = EState.drawingTP;
-             		System.out.println("te3");
     		  }
     	  }else if(anchor == Anchorstate.anchorpush){
 				initTransforming(e.getX(), e.getY());
 				eState = EState.transforming;
 			}
     	}else if(anchor == Anchorstate.anchorpush){
-    		 System.out.println("te3");
     			initTransforming(e.getX(), e.getY());
   				eState = EState.transforming;
   			
@@ -287,10 +332,7 @@ public class GDrawingPanel extends JPanel {
       public void mouseReleased(MouseEvent e) {
          if(textstate==Textstate.textepush){
         	 textfinsh(e.getX(),e.getY());
-     		System.out.println(e.getX()+"  "+e.getY());
          }else{
-        	 
-         
     	  if (eState == EState.drawingTP && anchor == Anchorstate.anchorready) {      
         	 finishTransforming(e.getX(), e.getY());
             eState = EState.idle;

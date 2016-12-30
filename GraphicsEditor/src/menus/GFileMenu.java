@@ -1,5 +1,6 @@
 package menus;
-import java.awt.FileDialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -22,6 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import contant.GConstants;
 import contant.GConstants.EFileMenuItem;
 import frame.GDrawingPanel;
+import frame.GMainFrame;
 import shapes.GShape;
 
 public class GFileMenu extends JMenu {
@@ -46,18 +48,22 @@ public class GFileMenu extends JMenu {
 		JFileChooser fileChooser = new JFileChooser(new File("."));
 		int reply;
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("GraphicEditor", "gps");
+		//지정된 확장자(extension)세트를 사용해 필터를 적용하는 FileFilter 의 구현입니다
 		fileChooser.setFileFilter(filter);
 		reply = fileChooser.showOpenDialog(null);
 		file = fileChooser.getSelectedFile();
 		return reply;
 	}
+	@SuppressWarnings("unchecked")
 	private void open() {
-		if (showDialog() != JOptionPane.OK_OPTION) {
+		if (showOpenDialog() != JOptionPane.OK_OPTION) {
 			return;
 		}
 		try {
 			ObjectInputStream inputStream;
+			// in 으로부터의 unmarshalling(비정렬화)을 위한 ObjectInputStream 객체를 생성한다.
 			inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+			//buffer 버퍼복사 fileinput 파일복사
 			drawingPanel.setShapeManagers((Vector<GShape>)inputStream.readObject());
 			inputStream.close();
 		} catch (FileNotFoundException e) {
@@ -81,19 +87,19 @@ public class GFileMenu extends JMenu {
 		String extension = ".gps";
 		if(renameFile != null) {
 			if(renameFile.getName().contains(extension))
-				file = new File(renameFile.getName());
+				file = new File(renameFile.getAbsoluteFile(), extension);//절대경로
 			else
-				file = new File(renameFile.getName() + extension);
+				file = new File(renameFile.getAbsoluteFile()+ extension);
 		}
 		return returnVal;
 	}
 	private void save() {
-		
 		if (showDialog() != JOptionPane.OK_OPTION) {
 			return;
 		}
 		try {
 			ObjectOutputStream outputStream;
+			// out을 marshalling 하기 위한 ObjectOutputStream 객체를 생성한다.
 			outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
 			outputStream.writeObject(drawingPanel.getShapeVector());
 			outputStream.close();
@@ -112,9 +118,11 @@ public class GFileMenu extends JMenu {
 			if(returnVal==JOptionPane.OK_OPTION){
 				save();
 				System.exit(1);
-
-			}else{
+				
+			}else if(returnVal==JOptionPane.NO_OPTION){
 				System.exit(1);
+			}else{
+				
 			}
 		}
 	}
@@ -126,25 +134,55 @@ public class GFileMenu extends JMenu {
 			if(returnVal==JOptionPane.OK_OPTION){
 				save();
 				drawingPanel.intitpanel();
-			}else{
+			}else if(returnVal==JOptionPane.NO_OPTION){
 				drawingPanel.intitpanel();
+			}else{
+				
 			}
 		}
 	}
+	private void saveAs() {
+		// TODO Auto-generated method stub
+		save();
+	}	
+
+	private void exit() {
+		// TODO Auto-generated method stub
+		System.exit(1);
+	}
+	private void fileinfo() {
+		// TODO Auto-generated method stub
+		String xsize=Integer.toString(drawingPanel.currentShape.getBounds().x);
+		String ysize=Integer.toString(drawingPanel.currentShape.getBounds().y);
+		String wsize=Integer.toString(drawingPanel.currentShape.getBounds().width);
+		String hsize=Integer.toString(drawingPanel.currentShape.getBounds().height);
+		JOptionPane.showConfirmDialog(null, "["+"x="+xsize+" y="+ysize+" w="+wsize+" h="+hsize+"]","shape_information",JOptionPane.OK_CANCEL_OPTION);
+		
+	}	
+
 	private class ActionHandler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getActionCommand().equals(EFileMenuItem.open.name())) {
 				open();
 			} else if (event.getActionCommand().equals(EFileMenuItem.save.name())) {
 				save();
-				
 			} else if(event.getActionCommand().equals(EFileMenuItem.close.name())){
 				close();
 			} else if(event.getActionCommand().equals(EFileMenuItem.newItem.name())){
 				newfile();
+			}else if(event.getActionCommand().equals(EFileMenuItem.shapeinfo.name())){
+				fileinfo();
+			}else if(event.getActionCommand().equals(EFileMenuItem.saveAs.name())){
+				saveAs();
+			}else if(event.getActionCommand().equals(EFileMenuItem.exit.name())){
+				exit();
 			}
 
-		}		
+		}
+
+
+
+		
 	}
 
 }

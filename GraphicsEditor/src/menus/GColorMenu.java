@@ -10,11 +10,13 @@ import javax.swing.JMenuItem;
 
 import contant.GConstants;
 import contant.GConstants.EColorMenuItem;
-import contant.GConstants.EFileMenuItem;
 import frame.GDrawingPanel;
-import frame.GToolBar.ActionHandler;
 
 public class GColorMenu extends JMenu {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private GDrawingPanel drawingPanel;
 	public GColorMenu(){
 		super(GConstants.COLORMENU_TITLE);

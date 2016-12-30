@@ -10,16 +10,16 @@ public class GMover extends GTransformer {
 		super(shape);
 		// TODO Auto-generated constructor stub
 	}
-
 	@Override
 	public void initTransforming(int x, int y, Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		this.getShape().setPoint(x, y);
 		this.getShape().draw(g2d);
 	}
-
 	@Override
 	public void keepTransforming(int x, int y, Graphics2D g2d) {
+		g2d.setStroke(LineStroke);
+
 		this.getShape().draw(g2d);
 		this.getShape().move(x, y);
 		this.getShape().draw(g2d);
